@@ -86,7 +86,7 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
     const selectedCell = gamefield[row][column];
     if (selectedCell.getValue() === 0) { // Check if the cell is empty
       selectedCell.addToken(activePlayer.symbol); // Place the active player's symbol
-      displayBoard(); // Display the updated board
+      displayBoard(); 
       if (checkWin()) {
         console.log(`${activePlayer.name} wins!`);
         return true; // Return true if the player has won
@@ -145,3 +145,4 @@ function startGame() {
 }
 
 startGame(); // Start the game
+
