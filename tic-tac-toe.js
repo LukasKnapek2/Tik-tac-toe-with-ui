@@ -1,4 +1,26 @@
-const readline = require("readline");
+const startButton = document.querySelector(".start-button");
+const boardContainer = document.querySelector(".board-container");
+const cellElement = document.querySelectorAll(".cell");
+
+
+startButton.addEventListener("click", () => startGame());
+let game;
+
+addGlobalEventListener("click", ".cell", (e) => {
+  const row = e.target.getAttribute("data-row"); 
+  const column = e.target.getAttribute("data-column")
+  game.playRound(row, column);
+});
+
+
+function addGlobalEventListener(type, selector, callback) {
+  document.addEventListener(type, e => {
+    if (e.target.matches(selector)) callback(e);
+  });
+}
+
+
+
 
 // Factory function to create the Gameboard
 function Gameboard() {
@@ -49,11 +71,13 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
 
   // Display the current state of the game board in the console
   const displayBoard = () => {
-    console.clear();
-    gamefield.forEach(row => {
-      console.log(row.map(cell => cell.getValue() || "_").join(" | "));
-    });
-  };
+    const boardContainer = document.querySelector('.board-container')
+   boardContainer.innerHTML =  gamefield.map((row, rowIndex ) => {
+      return `<div class="row">${row.map((cell, columnIndex) => `<div class="cell" data-row="${rowIndex}" data-column="${columnIndex}">${cell.getValue() || "_"}</div>`).join("")}</div>`;
+  }).join("");
+    
+};
+
 
   // Check if the current player has won
   const checkWin = () => {
@@ -108,41 +132,12 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
 }
 
 // Function to start the game
-function startGame() {
-  const game = GameController(); // Initialize the game controller
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-  });
-
-  let gameOver = false; // Flag to track if the game is over
-  game.displayBoard(); // Display the initial game board
-
-  const askQuestion = () => {
-    rl.question(`${game.activePlayer.name}, enter the row (0-2): `, (rowInput) => {
-      rl.question(`${game.activePlayer.name}, enter the column (0-2): `, (colInput) => {
-        const row = parseInt(rowInput);
-        const column = parseInt(colInput);
-
-        // Validate input and ensure it is within range
-        if (!isNaN(row) && !isNaN(column) && row >= 0 && row < 3 && column >= 0 && column < 3) {
-          gameOver = game.playRound(row, column); // Play a round and check if the game is over
-          if (gameOver) {
-            console.log("Game over!");
-            rl.close();
-          } else {
-            askQuestion();
-          }
-        } else {
-          console.log("Invalid input. Please enter numbers between 0 and 2."); // Handle invalid input
-          askQuestion();
-        }
-      });
-    });
-  };
-
-  askQuestion(); // Start the input loop
+function startGame(e) {
+  game = GameController(); // Initialize the game controller
+  let gameOver = false; 
+  game.displayBoard();
+  
 }
 
-startGame(); // Start the game
-
+ // Ui starts here
+ 
