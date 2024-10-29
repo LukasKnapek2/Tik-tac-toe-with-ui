@@ -22,14 +22,17 @@ newGameButton.addEventListener("click", () => startGame());
 easyBot.addEventListener("click", () => {
   botPlayerState.setBotMode(true, "easy");
   changeActivePlayerMode(easyBot);
+  startGame()
 });
 hardBot.addEventListener("click", () => {
   botPlayerState.setBotMode(true, "hard");
   changeActivePlayerMode(hardBot);
+  startGame()
 });
 realPlayerButton.addEventListener("click", () => {
   botPlayerState.setBotMode(false);
   changeActivePlayerMode(realPlayerButton);
+  startGame()
 });
 
 let game;
