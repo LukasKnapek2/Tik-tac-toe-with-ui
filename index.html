@@ -1,14 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
-        <button class="start-button">Start Game</button>
-        <div class="board-container"></div>
-        <script type="module" src="tic-tac-toe.js"></script>
-    
-</body>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <div class="players">
+
+        <div class="player">
+          <label for="player1"></label>
+          <input type="text" id="player1" value="Player One" class="player-one">
+        </div>
+        <button class="newGame-button">New Game</button>
+        <div class="player">
+          <label for="player2"></label>
+          <input type="text" id="player2" value="Player Two" class="player-two">
+        </div>
+      </div>
+      
+      <div class="bot-player">
+        <span>
+          Bot Player
+        </span>
+        <button class="easy-button">easy</button>
+        <button class="hard-button">hard</button>
+        <button class="real-player-button is-active">Real Player</button>
+      </div>
+    </header>
+    <div><span class="information-field"></span></div>
+    <div class="board-container">
+      
+    </div>
+
+    <footer><span class="footer-text"></span></footer>
+    <script type="module" src="tic-tac-toe.js"></script>
+  </body>
 </html>
