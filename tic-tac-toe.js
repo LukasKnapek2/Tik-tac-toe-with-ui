@@ -23,6 +23,7 @@ easyBot.addEventListener("click", () => {
   botPlayerState.setBotMode(true, "easy");
   changeActivePlayerMode(easyBot);
   startGame()
+  game.changePlayerName("playerTwo", "easy bot")
 });
 hardBot.addEventListener("click", () => {
   botPlayerState.setBotMode(true, "hard");
@@ -256,10 +257,11 @@ function GameController(
   const dropToken = (row, column) => {
     row = parseInt(row);
     column = parseInt(column);
-    const selectedCell = gamefield[row][column];
+    //const selectedCell = gamefield[row][column];
     //console.log(selectedCell);
-    if (selectedCell.getValue() === 0) {
-      selectedCell.addToken(activePlayer.symbol);
+    if (gamefield[row][column].getValue() === 0) {
+      gamefield[row][column].addToken(activePlayer.symbol);
+      //displayBoardBot()
       displayBoard();
       if (checkWin()) {
         informationField.innerHTML = `${activePlayer.name} wins!`;
@@ -279,8 +281,11 @@ function GameController(
         const { botActive, difficulty, botPlayed } =
           botPlayerState.getBotMode();
         if (botActive && !botPlayed) {
-          botPlayer(difficulty);
-          botPlayerState.setBotMode(botActive, difficulty, true);
+          setTimeout(() => {
+            console.log("Delayed for 1 second.");
+            botPlayer(difficulty);
+            botPlayerState.setBotMode(botActive, difficulty, true);
+          }, "1000");
         }
       }
     } else {
@@ -301,9 +306,10 @@ function GameController(
   };
 
   const displayBoardBot = () => {
-    gamefield.forEach((row) => {
-      console.log(row.map((cell) => cell.getValue() || "_").join(" | "));
-    });
+    console.log("neues Spielfeld")
+    console.log(gamefield
+    .map((row) => { return row.map((cell) => {
+      return cell.getValue() || "_"}).join("|")}));
   };
   const botPlayer = (difficulty) => {
     function getRandomInt(max) {
@@ -330,8 +336,11 @@ function GameController(
               //console.log(score, gamefield[i][j]);
               if (score > bestScore) {
                 bestScore = score;
-                if (depth == 0) {
+                if (depth === 0) {
+                  displayBoardBot()
+                  console.log("depth = 0")
                   move = { row: i, column: j };
+                  console.log(move, playerSymbol)
                   //console.log(move)
                   // Save the best move only at the top level
                 }
@@ -377,7 +386,8 @@ function GameController(
       playRound(row, column);
     }
     if (difficulty == "hard") {
-      miniMax(0, true);
+      move = null;
+      miniMax(0, true, "O");
       botPlayerState.setBotPlayed(true);
       const row = parseInt(move.row);
       const column = parseInt(move.column);
