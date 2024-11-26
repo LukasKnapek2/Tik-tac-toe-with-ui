@@ -115,10 +115,7 @@ function Gameboard() {
   return { getGamefield };
 }
 
-function GameController(
-  playerOneName = "Player One",
-  playerTwoName = "Player Two"
-) {
+function GameController() {
   const board = Gameboard();
   const gamefield = board.getGamefield();
 
@@ -129,7 +126,7 @@ function GameController(
     } else if (player === "playerTwo") {
       players[1].name = value;
     }
-    informationField.innerHTML = `It's ${game.activePlayer.name}'s turn `;
+    informationField.innerHTML = `It's ${activePlayer.name}'s turn `;
     console.log(players);
   };
   let activePlayer = players[0];
