@@ -84,6 +84,11 @@ const counter = () => {
 };
 const gameCounter = counter();
 
+const players = [
+  { name: playerOneName, symbol: "X" },
+  { name: playerTwoName, symbol: "O" },
+];
+
 function Gameboard() {
   const rows = 3;
   const columns = 3;
@@ -117,10 +122,7 @@ function GameController(
   const board = Gameboard();
   const gamefield = board.getGamefield();
 
-  const players = [
-    { name: playerOneName, symbol: "X" },
-    { name: playerTwoName, symbol: "O" },
-  ];
+ 
   const changePlayerName = (player, value) => {
     if (player === "playerOne") {
       players[0].name = value;
