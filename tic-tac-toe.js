@@ -29,11 +29,13 @@ hardBot.addEventListener("click", () => {
   botPlayerState.setBotMode(true, "hard");
   changeActivePlayerMode(hardBot);
   startGame()
+  game.changePlayerName("playerTwo", "hard bot")
 });
 realPlayerButton.addEventListener("click", () => {
   botPlayerState.setBotMode(false);
   changeActivePlayerMode(realPlayerButton);
   startGame()
+  game.changePlayerName("playerTwo", playerTwoName.value)
 });
 
 let game;
@@ -85,8 +87,8 @@ const counter = () => {
 const gameCounter = counter();
 
 const players = [
-  { name: playerOneName, symbol: "X" },
-  { name: playerTwoName, symbol: "O" },
+  { name: playerOneName.value || "Player 1", symbol: "X" },
+  { name: playerTwoName.value || "Player 2", symbol: "O" },
 ];
 
 function Gameboard() {
@@ -118,7 +120,7 @@ function Gameboard() {
 function GameController() {
   const board = Gameboard();
   const gamefield = board.getGamefield();
-
+  let gameLocked = false;
  
   const changePlayerName = (player, value) => {
     if (player === "playerOne") {
@@ -253,7 +255,8 @@ function GameController() {
     });
   }
 
-  const dropToken = (row, column) => {
+  const dropToken = (row, column, botMove) => {
+    if(gameLocked && !botMove) return;
     row = parseInt(row);
     column = parseInt(column);
     //const selectedCell = gamefield[row][column];
@@ -280,10 +283,12 @@ function GameController() {
         const { botActive, difficulty, botPlayed } =
           botPlayerState.getBotMode();
         if (botActive && !botPlayed) {
+          gameLocked = true
           setTimeout(() => {
             console.log("Delayed for 1 second.");
             botPlayer(difficulty);
             botPlayerState.setBotMode(botActive, difficulty, true);
+            gameLocked = false;
           }, "1000");
         }
       }
@@ -293,9 +298,9 @@ function GameController() {
     return false;
   };
 
-  const playRound = (row, column) => {
+  const playRound = (row, column, botMove) => {
     if (!gameStatus.getValue()) {
-      dropToken(row, column);
+      dropToken(row, column, botMove);
 
       const { botActive, botPlayed } = botPlayerState.getBotMode();
       if (botActive && !botPlayed) {
@@ -382,7 +387,7 @@ function GameController() {
       let row = randomCell[0];
       let column = randomCell[1];
       botPlayerState.setBotPlayed(true);
-      playRound(row, column);
+      playRound(row, column, true);
     }
     if (difficulty == "hard") {
       move = null;
@@ -390,7 +395,7 @@ function GameController() {
       botPlayerState.setBotPlayed(true);
       const row = parseInt(move.row);
       const column = parseInt(move.column);
-      playRound(row, column);
+      playRound(row, column, true);
     }
   };
 
